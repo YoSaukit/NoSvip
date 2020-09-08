@@ -11,6 +11,6 @@ jobs:
     - name: Build Image And Push to DockerHub
       uses: elgohr/Publish-Docker-Github-Action@2.11
       with:
-        name: goodboyymh/daydayup-api
+        name: goodboyymh/no-svip-web
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
