@@ -1,0 +1,20 @@
+name: .NET Core CI/CD Test
+on: push
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+
+    - name: Docker Build & Push to Docker Hub
+      uses: docker/build-push-action@v1
+      env:
+        USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKERFILE: "src/NoSvip.Web/Dockerfile"
+        IMAGE_NAME: "goodboyymh/no-svip-web"
+        TAG_NAME: "latest"
