@@ -3,14 +3,21 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/WebRTCHub").build();
 
 /****************************************************************************
-* Initial setup
-****************************************************************************/
+ * Initial setup
+ ****************************************************************************/
 
 const configuration = {
-   'iceServers': [{
-     'urls': 'stun:stun.services.mozilla.org'
-   }]
- };
+    iceServers: [
+        {
+            urls: 'stun:deershare.com',
+        },
+        {
+            urls: 'turn:0.peerjs.com:3478',
+            username: 'peerjs',
+            credential: 'peerjsp',
+        },
+    ]
+};
 const peerConn = new RTCPeerConnection(configuration);
 
 const roomNameTxt = document.getElementById('roomNameTxt');
@@ -31,9 +38,9 @@ sendFileBtn.disabled = true;
 
 $(roomTable).DataTable({
     columns: [
-        { data: 'RoomId', "width": "30%" },
-        { data: 'Name', "width": "50%" },
-        { data: 'Button', "width": "15%" }
+        {data: 'RoomId', "width": "30%"},
+        {data: 'Name', "width": "50%"},
+        {data: 'Button', "width": "15%"}
     ],
     "lengthChange": false,
     "searching": false,
@@ -43,8 +50,8 @@ $(roomTable).DataTable({
 });
 
 /****************************************************************************
-* Signaling server
-****************************************************************************/
+ * Signaling server
+ ****************************************************************************/
 
 // Connect to the signaling server
 connection.start().then(function () {
@@ -113,8 +120,8 @@ connection.start().then(function () {
 });
 
 /**
-* Send message to signaling server
-*/
+ * Send message to signaling server
+ */
 function sendMessage(message) {
     console.log('Client sending message: ', message);
     connection.invoke("SendMessage", myRoomId, message).catch(function (err) {
@@ -123,8 +130,8 @@ function sendMessage(message) {
 }
 
 /****************************************************************************
-* Room management
-****************************************************************************/
+ * Room management
+ ****************************************************************************/
 
 $(createRoomBtn).click(function () {
     var name = roomNameTxt.value;
@@ -159,21 +166,23 @@ $(sendFileBtn).click(function () {
 });
 
 /****************************************************************************
-* WebRTC peer connection and data channel
-****************************************************************************/
+ * WebRTC peer connection and data channel
+ ****************************************************************************/
 
 var dataChannel;
 
 function signalingMessageCallback(message) {
     if (message.type === 'offer') {
         console.log('Got offer. Sending answer to peer.');
-        peerConn.setRemoteDescription(new RTCSessionDescription(message), function () { },
+        peerConn.setRemoteDescription(new RTCSessionDescription(message), function () {
+            },
             logError);
         peerConn.createAnswer(onLocalSessionCreated, logError);
 
     } else if (message.type === 'answer') {
         console.log('Got answer.');
-        peerConn.setRemoteDescription(new RTCSessionDescription(message), function () { },
+        peerConn.setRemoteDescription(new RTCSessionDescription(message), function () {
+            },
             logError);
 
     } else if (message.type === 'candidate') {
@@ -308,8 +317,8 @@ function sendFile() {
 }
 
 /****************************************************************************
-* Auxiliary functions
-****************************************************************************/
+ * Auxiliary functions
+ ****************************************************************************/
 
 function logError(err) {
     if (!err) return;
