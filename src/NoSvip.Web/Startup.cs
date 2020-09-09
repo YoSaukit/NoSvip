@@ -19,12 +19,25 @@ namespace NoSvip.Web
             Configuration = configuration;
         }
 
+        private const string DefaultCorsPolicyName = "Default";
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
             services.AddControllersWithViews();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -40,6 +53,7 @@ namespace NoSvip.Web
             }
 
             // app.UseHttpsRedirection();
+            app.UseCors(DefaultCorsPolicyName);
             app.UseStaticFiles();
 
             app.UseRouting();
