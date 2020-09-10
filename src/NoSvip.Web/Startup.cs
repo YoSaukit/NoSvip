@@ -24,7 +24,7 @@ namespace NoSvip.Web
             {
                 options.AddPolicy(DefaultCorsPolicyName, builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("http://192.168.12.146:3000")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
@@ -40,8 +40,13 @@ namespace NoSvip.Web
             }
 
             app.UseCors(DefaultCorsPolicyName);
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseRouting();
-            app.UseEndpoints(endpoints => { endpoints.MapHub<P2PHub>("/p2p"); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<P2PHub>("/p2p");
+            });
         }
     }
 }
