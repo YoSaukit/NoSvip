@@ -24,7 +24,7 @@ namespace NoSvip.Web
             {
                 options.AddPolicy(DefaultCorsPolicyName, builder =>
                 {
-                    builder.WithOrigins("http://192.168.0.100:3000", "http://192.168.1.148:3000")
+                    builder.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
