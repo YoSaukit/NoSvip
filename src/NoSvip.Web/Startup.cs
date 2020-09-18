@@ -24,7 +24,8 @@ namespace NoSvip.Web
             {
                 options.AddPolicy(DefaultCorsPolicyName, builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("https://*.gridea.run")
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
